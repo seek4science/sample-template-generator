@@ -11,8 +11,8 @@ public class FileReader {
 	public static InputStream getStream(String name) throws IOException {
 		return FileReader.class.getResource(name).openStream();
 	}
-	
+
 	public static String getContents(String name) throws IOException {
-		return IOUtils.toString(getStream(name),StandardCharsets.UTF_8.toString());
+		return IOUtils.toString(getStream(name), StandardCharsets.UTF_8.toString());
 	}
 }

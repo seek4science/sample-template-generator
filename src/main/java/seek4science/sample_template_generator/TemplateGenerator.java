@@ -1,5 +1,7 @@
 package seek4science.sample_template_generator;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -23,6 +25,11 @@ public class TemplateGenerator {
 			sheet = (XSSFSheet) workbook.createSheet();
 		}	
 		sheet = (XSSFSheet) workbook.createSheet(definition.getSheetName());
+		Row row = sheet.createRow(0);
+		for (DefinitionColumn columnDefinition : definition.getColumns()) {
+			Cell cell = row.createCell(columnDefinition.getIndex());
+			cell.setCellValue(columnDefinition.getName());
+		}
 		
         return workbook; 
 	}

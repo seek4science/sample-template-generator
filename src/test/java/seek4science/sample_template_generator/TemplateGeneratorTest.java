@@ -3,9 +3,16 @@ package seek4science.sample_template_generator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
+
+
+
 import static org.junit.Assert.*;
+
+import java.io.File;
+import java.util.UUID;
 
 public class TemplateGeneratorTest {
 	
@@ -61,6 +68,22 @@ public class TemplateGeneratorTest {
 		assertEquals(0,row.getFirstCellNum());		
 		assertEquals("bbb",row.getCell(0).getStringCellValue());
 		assertEquals("aaa",row.getCell(1).getStringCellValue());
+	}
+	
+	@Test
+	public void generateToFile() throws Exception {
+		Definition def = new Definition("samples test", 1, new DefinitionColumn[0]);
+		File tmpDir = new File(System.getProperty("java.io.tmpdir"));
+		
+		String uuid = UUID.randomUUID().toString();
+		File saveFile = new File(tmpDir,uuid+".xlsx");
+		TemplateGenerator.generate(def,saveFile);
+		
+		Workbook book = WorkbookFactory.create(saveFile);		
+		assert(book instanceof XSSFWorkbook);
+		assertEquals(2,book.getNumberOfSheets());
+		assertEquals("samples test",book.getSheetAt(1).getSheetName());
+		
 	}
 	
 	

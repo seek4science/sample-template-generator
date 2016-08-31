@@ -1,7 +1,12 @@
-{"sheet_index":1,
-"sheet_name": "samples",
-"columns":[
-	{"first":[]},
-	{"second":[]}		
-]
+{
+	"sheet_index": 1,
+	"sheet_name": "samples",
+	"columns": [
+		{
+			"first": []
+		},
+		{
+			"second": []
+		}
+	]
 }

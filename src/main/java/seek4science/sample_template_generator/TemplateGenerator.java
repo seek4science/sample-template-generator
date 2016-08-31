@@ -28,7 +28,7 @@ public class TemplateGenerator {
 		Row row = sheet.createRow(0);
 		for (DefinitionColumn columnDefinition : definition.getColumns()) {
 			Cell cell = row.createCell(columnDefinition.getIndex());
-			cell.setCellValue(columnDefinition.getName());
+			cell.setCellValue(columnDefinition.getColumn());
 		}
 		
         return workbook; 

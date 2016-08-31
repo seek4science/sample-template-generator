@@ -2,12 +2,12 @@ package seek4science.sample_template_generator;
 
 public class DefinitionColumn {
 
-	private String name;
+	private String title;
 
 	private int index;
 
 	public DefinitionColumn(String name, int index) {
-		this.name = name;
+		this.title = name;
 		this.index = index;
 	}
 
@@ -15,8 +15,8 @@ public class DefinitionColumn {
 		return index;
 	}
 
-	public String getName() {
-		return name;
+	public String getColumn() {
+		return title;
 	}
 
 }

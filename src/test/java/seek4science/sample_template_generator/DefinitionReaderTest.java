@@ -18,10 +18,10 @@ public class DefinitionReaderTest {
 		DefinitionColumn col1 = def.getColumns()[0];
 		DefinitionColumn col2 = def.getColumns()[1];
 
-		assertEquals("first", col1.getName());
+		assertEquals("first", col1.getColumn());
 		assertEquals(0, col1.getIndex());
 
-		assertEquals("second", col2.getName());
+		assertEquals("second", col2.getColumn());
 		assertEquals(1, col2.getIndex());
 	}
 }

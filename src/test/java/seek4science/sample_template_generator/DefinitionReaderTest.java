@@ -20,8 +20,27 @@ public class DefinitionReaderTest {
 
 		assertEquals("first", col1.getColumn());
 		assertEquals(0, col1.getIndex());
+		assertEquals(0,col1.getValues().length);
 
 		assertEquals("second", col2.getColumn());
 		assertEquals(1, col2.getIndex());
+		assertEquals(0,col2.getValues().length);
+	}
+	
+	@Test
+	public void testReadingJSONWithCV() throws Exception {
+		String json = FileReader.getContents("simple-test-with-cv.json");
+		Definition def = DefinitionReader.read(json);
+		assertEquals(1,def.getColumns().length);
+		DefinitionColumn column = def.getColumns()[0];
+		
+		assertEquals("first", column.getColumn());
+		assertEquals(0, column.getIndex());
+		String [] values = column.getValues();
+		assertEquals(4,values.length);
+		assertEquals("a",values[0]);
+		assertEquals("b",values[1]);
+		assertEquals("c",values[2]);
+		assertEquals("d",values[3]);
 	}
 }

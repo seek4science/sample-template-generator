@@ -3,9 +3,15 @@ package seek4science.sample_template_generator;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataValidation;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -36,6 +42,16 @@ public class TemplateGenerator {
 		for (DefinitionColumn columnDefinition : definition.getColumns()) {
 			Cell cell = row.createCell(columnDefinition.getIndex());
 			cell.setCellValue(columnDefinition.getColumn());
+			if (columnDefinition.getValues().length>0) {								
+				XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
+				XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint)
+				dvHelper.createExplicitListConstraint(columnDefinition.getValues());
+				CellRangeAddressList addressList = new CellRangeAddressList(1, 1, columnDefinition.getIndex(), columnDefinition.getIndex());
+				XSSFDataValidation validation = (XSSFDataValidation)dvHelper.createValidation(
+				dvConstraint, addressList);
+				validation.setShowErrorBox(true);
+				sheet.addValidationData(validation);
+			}
 		}
 
 		return workbook;

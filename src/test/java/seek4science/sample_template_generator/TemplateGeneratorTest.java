@@ -1,5 +1,6 @@
 package seek4science.sample_template_generator;
 
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.UUID;
 
 public class TemplateGeneratorTest {
@@ -38,8 +40,8 @@ public class TemplateGeneratorTest {
 	
 	@Test
 	public void simpleGenerateWithFewColumns() throws Exception {
-		DefinitionColumn column1=new DefinitionColumn("aaa",0);
-		DefinitionColumn column2=new DefinitionColumn("bbb",1);
+		DefinitionColumn column1=new DefinitionColumn("aaa",new String []{},0);
+		DefinitionColumn column2=new DefinitionColumn("bbb",new String []{}, 1);
 		DefinitionColumn[] columns = new DefinitionColumn[]{column1,column2};
 		Definition def = new Definition("samples", 0, columns);
 		Workbook book = TemplateGenerator.generate(def);
@@ -54,8 +56,8 @@ public class TemplateGeneratorTest {
 		assertEquals("bbb",row.getCell(1).getStringCellValue());
 		
 		//check it uses the index
-		column1=new DefinitionColumn("aaa",1);
-		column2=new DefinitionColumn("bbb",0);
+		column1=new DefinitionColumn("aaa",new String []{},1);
+		column2=new DefinitionColumn("bbb",new String []{},0);
 		columns = new DefinitionColumn[]{column1,column2};
 		def = new Definition("samples", 0, columns);
 		book = TemplateGenerator.generate(def);
@@ -83,6 +85,25 @@ public class TemplateGeneratorTest {
 		assert(book instanceof XSSFWorkbook);
 		assertEquals(2,book.getNumberOfSheets());
 		assertEquals("samples test",book.getSheetAt(1).getSheetName());
+		
+	}
+	
+	@Test
+	public void simpleGenerateWithValues() throws Exception {
+		DefinitionColumn column1=new DefinitionColumn("colours",new String []{"red","green","blue"},0);
+		DefinitionColumn column2=new DefinitionColumn("gender",new String []{"male","female"},1);
+		DefinitionColumn[] columns = new DefinitionColumn[]{column1,column2};
+		Definition def = new Definition("samples", 0, columns);
+		Workbook book = TemplateGenerator.generate(def);
+		assertNotNull(book);
+		Sheet sheet = book.getSheet("samples");
+		assertNotNull(sheet);
+		assertEquals(0,sheet.getFirstRowNum());
+		Row row = sheet.getRow(0);
+		assertEquals(0,row.getFirstCellNum());		
+		assertEquals("colours",row.getCell(0).getStringCellValue());						
+		assertEquals("gender",row.getCell(1).getStringCellValue());
+		
 		
 	}
 	

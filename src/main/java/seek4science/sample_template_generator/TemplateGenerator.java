@@ -5,7 +5,9 @@ import java.io.FileOutputStream;
 
 import org.apache.poi.hssf.usermodel.DVConstraint;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataValidation;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddressList;
@@ -32,7 +34,8 @@ public class TemplateGenerator {
 	}
 
 	public Workbook generate() throws Exception {
-		Workbook workbook = new XSSFWorkbook();
+		Workbook workbook = new XSSFWorkbook();					   	    
+		
 		XSSFSheet sheet = null;
 		for (int i = 0; i < definition.getSheetIndex(); i++) {
 			sheet = (XSSFSheet) workbook.createSheet();
@@ -53,6 +56,15 @@ public class TemplateGenerator {
 				sheet.addValidationData(validation);
 			}
 		}
+		
+		//set font to bold
+		CellStyle style = workbook.createCellStyle();
+		Font font = workbook.createFont();
+		font.setFontHeightInPoints((short)10);
+		
+	    font.setBold(true);
+		style.setFont(font);
+		row.setRowStyle(style);
 
 		return workbook;
 	}

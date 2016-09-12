@@ -102,8 +102,7 @@ public class TemplateGeneratorTest {
 		Row row = sheet.getRow(0);
 		assertEquals(0,row.getFirstCellNum());		
 		assertEquals("colours",row.getCell(0).getStringCellValue());						
-		assertEquals("gender",row.getCell(1).getStringCellValue());
-		
+		assertEquals("gender",row.getCell(1).getStringCellValue());			
 		
 	}
 	

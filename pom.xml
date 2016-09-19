@@ -4,7 +4,7 @@
 
 	<groupId>seek4science</groupId>
 	<artifactId>sample-template-generator</artifactId>
-	<version>0.2</version>
+	<version>0.3</version>
 	<packaging>jar</packaging>
 
 	<name>sample-template-generator</name>
@@ -70,4 +70,5 @@
 			</plugin>
 		</plugins>
 	</build>
+	<description>This is a bespoke java library for use in SEEK (http://seek4science.org). It uses Apache POI to create specially crafted Excel spreadsheets for describing biological sample details</description>
 </project>

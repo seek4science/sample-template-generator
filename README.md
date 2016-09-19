@@ -1,5 +1,8 @@
 # Sample Generator Gem
 
+[![Build Status](https://travis-ci.org/seek4science/sample-template-generato.svg?branch=master)](https://travis-ci.org/seek4science/sample-template-generator)
+
+
 ## License
 
 Copyright © 2009-2016, University of Manchester and HITS gGmbH

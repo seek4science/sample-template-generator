@@ -12,7 +12,7 @@ import org.json.simple.parser.ParseException;
 
 public class DefinitionReader {
 
-	public static Definition read(String json) throws ParseException {		
+	public static Definition read(String json) throws ParseException {
 		JSONObject jsonObj = parseJSONObject(json);
 		return new Definition(getSheetName(jsonObj), getSheetIndex(jsonObj), getColumns(jsonObj));
 	}
@@ -42,7 +42,7 @@ public class DefinitionReader {
 		while (iterator.hasNext()) {
 			JSONObject columnObj = iterator.next();
 			String columnName = (String) columnObj.keySet().toArray()[0];
-			String [] values = (String [] )((JSONArray)columnObj.get(columnName)).toArray(new String [] {});
+			String[] values = (String[]) ((JSONArray) columnObj.get(columnName)).toArray(new String[] {});
 			DefinitionColumn c = new DefinitionColumn(columnName, values, index++);
 			result.add(c);
 		}

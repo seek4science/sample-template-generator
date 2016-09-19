@@ -1,7 +1,6 @@
 # Sample Generator Gem
 
-[![Build Status](https://travis-ci.org/seek4science/sample-template-generato.svg?branch=master)](https://travis-ci.org/seek4science/sample-template-generator)
-
+[![Build Status](https://travis-ci.org/seek4science/sample-template-generator.svg?branch=master)](https://travis-ci.org/seek4science/sample-template-generator)
 
 ## License
 

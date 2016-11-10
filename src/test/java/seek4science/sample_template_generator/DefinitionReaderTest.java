@@ -43,4 +43,21 @@ public class DefinitionReaderTest {
 		assertEquals("c", values[2]);
 		assertEquals("d", values[3]);
 	}
+	
+	@Test
+	public void testReadingJSONWithQuote() throws Exception {
+		String json = FileReader.getContents("quote-test-with-cv.json");
+		Definition def = DefinitionReader.read(json);
+		assertEquals(1, def.getColumns().length);
+		DefinitionColumn column = def.getColumns()[0];
+
+		assertEquals("quote's", column.getColumn());
+		assertEquals(0, column.getIndex());
+		String[] values = column.getValues();
+		assertEquals(4, values.length);
+		assertEquals("a's", values[0]);
+		assertEquals("b\"c", values[1]);
+		assertEquals("c]d", values[2]);
+		assertEquals("d[e", values[3]);
+	}
 }

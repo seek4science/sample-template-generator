@@ -13,6 +13,8 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
+import seek4science.sample_template_generator.testfiles.FileReader;
+
 public class TemplateGeneratorTest {
 
 	@Test
@@ -101,6 +103,20 @@ public class TemplateGeneratorTest {
 		assertEquals("colours", row.getCell(0).getStringCellValue());
 		assertEquals("gender", row.getCell(1).getStringCellValue());
 
+	}
+	
+	@Test
+	public void generateFromJSONWithQuotes() throws Exception {
+		String json = FileReader.getContents("quote-test-with-cv.json");
+		Definition def = DefinitionReader.read(json);
+		Workbook book = TemplateGenerator.generate(def);
+		assertNotNull(book);
+		Sheet sheet = book.getSheet("samples");
+		assertNotNull(sheet);
+		assertEquals(0, sheet.getFirstRowNum());
+		Row row = sheet.getRow(0);
+		assertEquals(0, row.getFirstCellNum());
+		assertEquals("quote's", row.getCell(0).getStringCellValue());
 	}
 
 }

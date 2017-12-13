@@ -19,19 +19,19 @@ public class TemplateGeneratorTest {
 
 	@Test
 	public void simpleGenerateWithNoColumns() throws Exception {
-		Definition def = new Definition("samples test", 1, new DefinitionColumn[0]);
+		Definition def = new Definition("samples test", 1, new DefinitionColumn[0], null);
 		Workbook book = TemplateGenerator.generate(def);
 		assertNotNull(book);
 		assert (book instanceof XSSFWorkbook);
 		assertEquals(2, book.getNumberOfSheets());
 		assertEquals("samples test", book.getSheetAt(1).getSheetName());
 
-		def = new Definition("samples test", 0, new DefinitionColumn[0]);
+		def = new Definition("samples test", 0, new DefinitionColumn[0],null);
 		book = TemplateGenerator.generate(def);
 		assertEquals(1, book.getNumberOfSheets());
 		assertEquals("samples test", book.getSheetAt(0).getSheetName());
 
-		def = new Definition("samples test sheet", 5, new DefinitionColumn[0]);
+		def = new Definition("samples test sheet", 5, new DefinitionColumn[0],null);
 		book = TemplateGenerator.generate(def);
 		assertEquals(6, book.getNumberOfSheets());
 		assertEquals("samples test sheet", book.getSheetAt(5).getSheetName());
@@ -42,7 +42,7 @@ public class TemplateGeneratorTest {
 		DefinitionColumn column1 = new DefinitionColumn("aaa", new String[] {}, 0);
 		DefinitionColumn column2 = new DefinitionColumn("bbb", new String[] {}, 1);
 		DefinitionColumn[] columns = new DefinitionColumn[] { column1, column2 };
-		Definition def = new Definition("samples", 0, columns);
+		Definition def = new Definition("samples", 0, columns, null);
 		Workbook book = TemplateGenerator.generate(def);
 		assertNotNull(book);
 		Sheet sheet = book.getSheet("samples");
@@ -58,7 +58,7 @@ public class TemplateGeneratorTest {
 		column1 = new DefinitionColumn("aaa", new String[] {}, 1);
 		column2 = new DefinitionColumn("bbb", new String[] {}, 0);
 		columns = new DefinitionColumn[] { column1, column2 };
-		def = new Definition("samples", 0, columns);
+		def = new Definition("samples", 0, columns, null);
 		book = TemplateGenerator.generate(def);
 		assertNotNull(book);
 		sheet = book.getSheet("samples");
@@ -73,7 +73,7 @@ public class TemplateGeneratorTest {
 
 	@Test
 	public void generateToFile() throws Exception {
-		Definition def = new Definition("samples test", 1, new DefinitionColumn[0]);
+		Definition def = new Definition("samples test", 1, new DefinitionColumn[0], null);
 		File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 
 		String uuid = UUID.randomUUID().toString();
@@ -92,7 +92,7 @@ public class TemplateGeneratorTest {
 		DefinitionColumn column1 = new DefinitionColumn("colours", new String[] { "red", "green", "blue" }, 0);
 		DefinitionColumn column2 = new DefinitionColumn("gender", new String[] { "male", "female" }, 1);
 		DefinitionColumn[] columns = new DefinitionColumn[] { column1, column2 };
-		Definition def = new Definition("samples", 0, columns);
+		Definition def = new Definition("samples", 0, columns, null);
 		Workbook book = TemplateGenerator.generate(def);
 		assertNotNull(book);
 		Sheet sheet = book.getSheet("samples");

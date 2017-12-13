@@ -1,6 +1,6 @@
 package seek4science.sample_template_generator;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -25,6 +25,8 @@ public class DefinitionReaderTest {
 		assertEquals("second", col2.getColumn());
 		assertEquals(1, col2.getIndex());
 		assertEquals(0, col2.getValues().length);
+		
+		assertNull(def.getBaseTemplatePath());
 	}
 
 	@Test
@@ -42,6 +44,8 @@ public class DefinitionReaderTest {
 		assertEquals("b", values[1]);
 		assertEquals("c", values[2]);
 		assertEquals("d", values[3]);
+		
+		assertNull(def.getBaseTemplatePath());
 	}
 	
 	@Test
@@ -59,5 +63,14 @@ public class DefinitionReaderTest {
 		assertEquals("b\"c", values[1]);
 		assertEquals("c]d", values[2]);
 		assertEquals("d[e", values[3]);
+		
+		assertNull(def.getBaseTemplatePath());
+	}
+	
+	@Test
+	public void testReadingJSONWithBaseTemplatePath() throws Exception {
+		String json = FileReader.getContents("includes-template-path.json");
+		Definition def = DefinitionReader.read(json);
+		assertEquals("/home/fred/stuff/template.xlsx",def.getBaseTemplatePath());
 	}
 }

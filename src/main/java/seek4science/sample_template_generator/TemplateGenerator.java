@@ -37,7 +37,7 @@ public class TemplateGenerator {
 	}
 
 	public Workbook generate() throws Exception {
-		Workbook workbook = initialiseWorkbook();
+		Workbook workbook = initialiseWorkbook();		
 
 		XSSFSheet sheet = null;
 		if (workbook.getNumberOfSheets() <= definition.getSheetIndex()) {
@@ -46,7 +46,13 @@ public class TemplateGenerator {
 			}
 		}
 		
+		if (workbook.getSheet(definition.getSheetName())!=null) {
+			throw new DuplicateSheetException("The sheet name "+definition.getSheetName()+" already exists");
+		}
+		
 		sheet = (XSSFSheet) workbook.createSheet(definition.getSheetName());
+		workbook.setSheetOrder(definition.getSheetName(), definition.getSheetIndex());
+		
 		Row row = sheet.createRow(0);
 		for (DefinitionColumn columnDefinition : definition.getColumns()) {
 			Cell cell = row.createCell(columnDefinition.getIndex());
@@ -72,6 +78,7 @@ public class TemplateGenerator {
 		font.setBold(true);
 		style.setFont(font);
 		row.setRowStyle(style);
+		
 
 		return workbook;
 	}

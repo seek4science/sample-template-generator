@@ -123,7 +123,7 @@ public class TemplateGeneratorTest {
 	public void generateFromBaseTemplate() throws Exception {
 		String path = getTestBaseTemplatePath();
 		Workbook originalWorkbook = WorkbookFactory.create(new FileInputStream(path));
-		assertEquals(18,originalWorkbook.getNumberOfSheets()); // a lot are hidden sheets
+		assertEquals(18,originalWorkbook.getNumberOfSheets()); // a lot are hidden sheets from RightField
 		assertEquals("Metadata",originalWorkbook.getSheetAt(0).getSheetName());
 		assertNull(originalWorkbook.getSheet("samples test"));
 		Definition def = new Definition("samples test", 18, new DefinitionColumn[0], path);
@@ -132,6 +132,31 @@ public class TemplateGeneratorTest {
 		assertEquals("Metadata",book.getSheetAt(0).getSheetName());
 		assertNotNull(book.getSheet("samples test"));
 		assertEquals("samples test",book.getSheetAt(18).getSheetName());
+	}
+	
+	@Test
+	public void generateFromBaseTemplateInsertedSheet() throws Exception {
+		String path = getTestBaseTemplatePath();
+		
+		Definition def = new Definition("samples test", 1, new DefinitionColumn[0], path);
+		Workbook book = TemplateGenerator.generate(def);
+		assertEquals(19,book.getNumberOfSheets()); 
+		assertEquals("Metadata",book.getSheetAt(0).getSheetName());
+		assertNotNull(book.getSheet("samples test"));
+		assertEquals("samples test",book.getSheetAt(1).getSheetName());
+		
+		def = new Definition("samples test", 2, new DefinitionColumn[0], path);
+		book = TemplateGenerator.generate(def);
+		assertEquals(19,book.getNumberOfSheets()); 
+		assertEquals("Metadata",book.getSheetAt(0).getSheetName());
+		assertNotNull(book.getSheet("samples test"));
+		assertEquals("samples test",book.getSheetAt(2).getSheetName());
+	}
+	
+	@Test(expected = DuplicateSheetException.class)
+	public void duplicateSheetExceptionThrown() throws Exception {			
+		Definition def = new Definition("Metadata", 1, new DefinitionColumn[0], getTestBaseTemplatePath());
+		Workbook book = TemplateGenerator.generate(def);
 	}
 	
 	private String getTestBaseTemplatePath() throws Exception {

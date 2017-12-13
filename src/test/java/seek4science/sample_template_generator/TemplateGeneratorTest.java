@@ -1,9 +1,9 @@
 package seek4science.sample_template_generator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.UUID;
 
 import org.apache.poi.ss.usermodel.Row;
@@ -118,5 +118,26 @@ public class TemplateGeneratorTest {
 		assertEquals(0, row.getFirstCellNum());
 		assertEquals("quote's", row.getCell(0).getStringCellValue());
 	}
+	
+	@Test
+	public void generateFromBaseTemplate() throws Exception {
+		String path = getTestBaseTemplatePath();
+		Workbook originalWorkbook = WorkbookFactory.create(new FileInputStream(path));
+		assertEquals(18,originalWorkbook.getNumberOfSheets()); // a lot are hidden sheets
+		assertEquals("Metadata",originalWorkbook.getSheetAt(0).getSheetName());
+		assertNull(originalWorkbook.getSheet("samples test"));
+		Definition def = new Definition("samples test", 18, new DefinitionColumn[0], path);
+		Workbook book = TemplateGenerator.generate(def);
+		assertEquals(19,book.getNumberOfSheets()); 
+		assertEquals("Metadata",book.getSheetAt(0).getSheetName());
+		assertNotNull(book.getSheet("samples test"));
+		assertEquals("samples test",book.getSheetAt(18).getSheetName());
+	}
+	
+	private String getTestBaseTemplatePath() throws Exception {
+		return FileReader.class.getResource("test-base-template.xlsx").getPath();
+	}
+	
+	
 
 }

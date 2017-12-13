@@ -1,13 +1,18 @@
 package seek4science.sample_template_generator;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
+import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
@@ -32,12 +37,15 @@ public class TemplateGenerator {
 	}
 
 	public Workbook generate() throws Exception {
-		Workbook workbook = new XSSFWorkbook();
+		Workbook workbook = initialiseWorkbook();
 
 		XSSFSheet sheet = null;
-		for (int i = 0; i < definition.getSheetIndex(); i++) {
-			sheet = (XSSFSheet) workbook.createSheet();
+		if (workbook.getNumberOfSheets() <= definition.getSheetIndex()) {
+			for (int i = workbook.getNumberOfSheets(); i < definition.getSheetIndex(); i++) {
+				sheet = (XSSFSheet) workbook.createSheet();
+			}
 		}
+		
 		sheet = (XSSFSheet) workbook.createSheet(definition.getSheetName());
 		Row row = sheet.createRow(0);
 		for (DefinitionColumn columnDefinition : definition.getColumns()) {
@@ -76,6 +84,15 @@ public class TemplateGenerator {
 		fileOut.close();
 
 		return book;
+	}
+	
+	private Workbook initialiseWorkbook() throws EncryptedDocumentException, InvalidFormatException, FileNotFoundException, IOException {
+		if (definition.getBaseTemplatePath()==null) {
+			return new XSSFWorkbook();
+		}
+		else {
+			return WorkbookFactory.create(definition.getBaseTemplateStream());
+		}
 	}
 
 }

@@ -14,7 +14,8 @@ public class DefinitionReader {
 
 	public static Definition read(String json) throws ParseException {
 		JSONObject jsonObj = parseJSONObject(json);
-		return new Definition(getSheetName(jsonObj), getSheetIndex(jsonObj), getColumns(jsonObj), getBaseTemplatePath(jsonObj));
+		return new Definition(getSheetName(jsonObj), getSheetIndex(jsonObj), getColumns(jsonObj),
+				getBaseTemplatePath(jsonObj));
 	}
 
 	private static int getSheetIndex(JSONObject obj) {
@@ -48,15 +49,14 @@ public class DefinitionReader {
 		}
 		return result.toArray(new DefinitionColumn[0]);
 	}
-	
+
 	private static String getBaseTemplatePath(JSONObject obj) {
 		if (obj.containsKey("base template path")) {
 			return obj.get("base template path").toString();
-		}
-		else {
+		} else {
 			return null;
 		}
-				
+
 	}
 
 }

@@ -33,7 +33,7 @@ public class Definition {
 	public String getBaseTemplatePath() {
 		return baseTemplatePath;
 	}
-	
+
 	public InputStream getBaseTemplateStream() throws FileNotFoundException {
 		return new FileInputStream(getBaseTemplatePath());
 	}

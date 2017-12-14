@@ -110,7 +110,7 @@ public class TemplateGeneratorTest {
 	@Test
 	public void generateFromJSONWithQuotes() throws Exception {
 		String json = FileReader.getContents("quote-test-with-cv.json");
-		Definition def = DefinitionReader.read(json);
+		Definition def = new DefinitionReader(json).read();
 		Workbook book = TemplateGenerator.generate(def);
 		assertNotNull(book);
 		Sheet sheet = book.getSheet("samples");

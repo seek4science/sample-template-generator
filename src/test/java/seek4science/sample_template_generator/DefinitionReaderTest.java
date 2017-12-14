@@ -12,7 +12,7 @@ public class DefinitionReaderTest {
 	@Test
 	public void testReadingJSON() throws Exception {
 		String json = FileReader.getContents("simple-test.json");
-		Definition def = DefinitionReader.read(json);
+		Definition def = new DefinitionReader(json).read();
 		assertEquals("samples", def.getSheetName());
 		assertEquals(1, def.getSheetIndex());
 		assertEquals(2, def.getColumns().length);
@@ -33,7 +33,7 @@ public class DefinitionReaderTest {
 	@Test
 	public void testReadingJSONWithCV() throws Exception {
 		String json = FileReader.getContents("simple-test-with-cv.json");
-		Definition def = DefinitionReader.read(json);
+		Definition def = new DefinitionReader(json).read();
 		assertEquals(1, def.getColumns().length);
 		DefinitionColumn column = def.getColumns()[0];
 
@@ -52,7 +52,7 @@ public class DefinitionReaderTest {
 	@Test
 	public void testReadingJSONWithQuote() throws Exception {
 		String json = FileReader.getContents("quote-test-with-cv.json");
-		Definition def = DefinitionReader.read(json);
+		Definition def = new DefinitionReader(json).read();
 		assertEquals(1, def.getColumns().length);
 		DefinitionColumn column = def.getColumns()[0];
 
@@ -71,31 +71,31 @@ public class DefinitionReaderTest {
 	@Test
 	public void testReadingJSONWithBaseTemplatePath() throws Exception {
 		String json = FileReader.getContents("includes-template-path.json");
-		Definition def = DefinitionReader.read(json);
+		Definition def = new DefinitionReader(json).read();
 		assertEquals("/home/fred/stuff/template.xlsx", def.getBaseTemplatePath());
 	}
 
 	@Test(expected = InvalidJSONKeyException.class)
 	public void testInvalidJSONKey() throws Exception {
 		String json = FileReader.getContents("invalid-key.json");
-		DefinitionReader.read(json);
+		new DefinitionReader(json).read();
 	}
 
 	@Test(expected = MissingJSONKeyException.class)
 	public void testMissingSheetNameKey() throws Exception {
 		String json = FileReader.getContents("missing-sheet-name-key.json");
-		DefinitionReader.read(json);
+		new DefinitionReader(json).read();
 	}
 
 	@Test(expected = MissingJSONKeyException.class)
 	public void testMissingSheetIndexKey() throws Exception {
 		String json = FileReader.getContents("missing-sheet-index-key.json");
-		DefinitionReader.read(json);
+		new DefinitionReader(json).read();
 	}
 
 	@Test(expected = MissingJSONKeyException.class)
 	public void testMissingColumnsKey() throws Exception {
 		String json = FileReader.getContents("missing-column-key.json");
-		DefinitionReader.read(json);
+		new DefinitionReader(json).read();
 	}
 }

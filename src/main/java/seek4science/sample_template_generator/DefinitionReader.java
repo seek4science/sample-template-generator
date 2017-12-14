@@ -1,7 +1,9 @@
 package seek4science.sample_template_generator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -12,8 +14,12 @@ import org.json.simple.parser.ParseException;
 
 public class DefinitionReader {
 
-	public static Definition read(String json) throws ParseException {
+	private static List<String> MANDATORY_KEYS = Arrays.asList("sheet_index", "sheet_name", "columns");
+	private static List<String> OPTIONAL_KEYS = Arrays.asList("base_template_path");
+
+	public static Definition read(String json) throws ParseException, MissingJSONKeyException, InvalidJSONKeyException {
 		JSONObject jsonObj = parseJSONObject(json);
+		checkKeys(jsonObj);
 		return new Definition(getSheetName(jsonObj), getSheetIndex(jsonObj), getColumns(jsonObj),
 				getBaseTemplatePath(jsonObj));
 	}
@@ -51,12 +57,33 @@ public class DefinitionReader {
 	}
 
 	private static String getBaseTemplatePath(JSONObject obj) {
-		if (obj.containsKey("base template path")) {
-			return obj.get("base template path").toString();
+		if (obj.containsKey("base_template_path")) {
+			return obj.get("base_template_path").toString();
 		} else {
 			return null;
 		}
 
+	}
+
+	private static void checkKeys(JSONObject obj) throws MissingJSONKeyException, InvalidJSONKeyException {
+		checkMissingKey(obj);
+		checkInvalidKey(obj);
+	}
+
+	private static void checkMissingKey(JSONObject obj) throws MissingJSONKeyException {
+		for (String key : MANDATORY_KEYS) {
+			if (!obj.containsKey(key)) {
+				throw new MissingJSONKeyException(key + " not found in JSON");
+			}
+		}
+	}
+
+	private static void checkInvalidKey(JSONObject obj) throws InvalidJSONKeyException {
+		for (Object key : obj.keySet()) {
+			if (!(MANDATORY_KEYS.contains(key) || OPTIONAL_KEYS.contains(key))) {
+				throw new InvalidJSONKeyException(key + " not expected in JSON");
+			}
+		}
 	}
 
 }

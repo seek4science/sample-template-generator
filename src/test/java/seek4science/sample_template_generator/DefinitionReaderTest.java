@@ -74,4 +74,28 @@ public class DefinitionReaderTest {
 		Definition def = DefinitionReader.read(json);
 		assertEquals("/home/fred/stuff/template.xlsx", def.getBaseTemplatePath());
 	}
+
+	@Test(expected = InvalidJSONKeyException.class)
+	public void testInvalidJSONKey() throws Exception {
+		String json = FileReader.getContents("invalid-key.json");
+		DefinitionReader.read(json);
+	}
+
+	@Test(expected = MissingJSONKeyException.class)
+	public void testMissingSheetNameKey() throws Exception {
+		String json = FileReader.getContents("missing-sheet-name-key.json");
+		DefinitionReader.read(json);
+	}
+
+	@Test(expected = MissingJSONKeyException.class)
+	public void testMissingSheetIndexKey() throws Exception {
+		String json = FileReader.getContents("missing-sheet-index-key.json");
+		DefinitionReader.read(json);
+	}
+
+	@Test(expected = MissingJSONKeyException.class)
+	public void testMissingColumnsKey() throws Exception {
+		String json = FileReader.getContents("missing-column-key.json");
+		DefinitionReader.read(json);
+	}
 }

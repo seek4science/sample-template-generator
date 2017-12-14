@@ -1,6 +1,7 @@
 {
 	"sheet_index": 1,
 	"sheet_name": "samples",
+	"wibble": "invalid",
 	"base_template_path": "/home/fred/stuff/template.xlsx",
 	"columns": [
 		{

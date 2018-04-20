@@ -1,5 +1,6 @@
 package seek4science.sample_template_generator;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,9 +8,12 @@ import java.io.IOException;
 
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -55,8 +59,14 @@ public class TemplateGenerator {
 
 		Row row = sheet.createRow(0);
 		for (DefinitionColumn columnDefinition : definition.getColumns()) {
-			Cell cell = row.createCell(columnDefinition.getIndex());
+			Cell cell = row.createCell(columnDefinition.getIndex());							
+			
 			cell.setCellValue(columnDefinition.getColumn());
+			
+			setColumnWidth(sheet,columnDefinition.getColumn(),cell.getColumnIndex());		
+			
+			setCellStyle(cell);
+			
 			if (columnDefinition.getValues().length > 0) {
 				XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
 				XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper
@@ -72,14 +82,36 @@ public class TemplateGenerator {
 
 		// set font to bold
 		CellStyle style = workbook.createCellStyle();
-		Font font = workbook.createFont();
-		font.setFontHeightInPoints((short) 10);
-
-		font.setBold(true);
-		style.setFont(font);
+				
+		sheet.setDisplayGridlines(true);
+		
 		row.setRowStyle(style);
 
 		return workbook;
+	}
+
+	private void setCellStyle(Cell cell) {
+		
+		// make it light grey with a border
+		CellStyle cellStyle = cell.getSheet().getWorkbook().createCellStyle();		
+		cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+		cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND); 
+		cellStyle.setBorderBottom(BorderStyle.THIN);
+		cellStyle.setBorderLeft(BorderStyle.THIN);
+		cellStyle.setBorderRight(BorderStyle.THIN);
+		
+		// bold text
+		Font font = cell.getSheet().getWorkbook().getFontAt(cellStyle.getFontIndex());				
+		font.setFontHeightInPoints((short) 10);		
+		font.setBold(true);
+		cellStyle.setFont(font);		
+		
+		cell.setCellStyle(cellStyle); 
+		
+	}
+
+	private void setColumnWidth(XSSFSheet sheet, String text, int columnIndex) {
+		sheet.setColumnWidth(columnIndex, (text.length()+2) * 256);		
 	}
 
 	public Workbook generate(File destinationFile) throws Exception {

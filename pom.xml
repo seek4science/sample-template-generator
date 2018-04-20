@@ -4,7 +4,7 @@
 
 	<groupId>seek4science</groupId>
 	<artifactId>sample-template-generator</artifactId>
-	<version>0.4</version>
+	<version>0.5</version>
 	<packaging>jar</packaging>
 
 	<name>sample-template-generator</name>

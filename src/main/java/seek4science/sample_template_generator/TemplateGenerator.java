@@ -14,13 +14,17 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Name;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.SheetVisibility;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.ss.util.CellReference;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
 import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFName;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
@@ -43,6 +47,7 @@ public class TemplateGenerator {
 	public Workbook generate() throws Exception {
 		Workbook workbook = initialiseWorkbook();
 
+		XSSFSheet cvValidationSheet = null;
 		XSSFSheet sheet = null;
 		if (workbook.getNumberOfSheets() <= definition.getSheetIndex()) {
 			for (int i = workbook.getNumberOfSheets(); i < definition.getSheetIndex(); i++) {
@@ -55,8 +60,8 @@ public class TemplateGenerator {
 		}
 
 		sheet = (XSSFSheet) workbook.createSheet(definition.getSheetName());
-		workbook.setSheetOrder(definition.getSheetName(), definition.getSheetIndex());
-
+		workbook.setSheetOrder(definition.getSheetName(), definition.getSheetIndex());		
+		
 		Row row = sheet.createRow(0);
 		for (DefinitionColumn columnDefinition : definition.getColumns()) {
 			Cell cell = row.createCell(columnDefinition.getIndex());							
@@ -68,9 +73,15 @@ public class TemplateGenerator {
 			setCellStyle(cell);
 			
 			if (columnDefinition.getValues().length > 0) {
+				if (cvValidationSheet==null) {
+					cvValidationSheet = createDropdownValidationSheet(workbook);
+				}
+				
+				String rangeName = createNamedRange(workbook, cvValidationSheet, columnDefinition);					
+				
 				XSSFDataValidationHelper dvHelper = new XSSFDataValidationHelper(sheet);
 				XSSFDataValidationConstraint dvConstraint = (XSSFDataValidationConstraint) dvHelper
-						.createExplicitListConstraint(columnDefinition.getValues());
+						.createFormulaListConstraint(rangeName);
 				CellRangeAddressList addressList = new CellRangeAddressList(1, 1, columnDefinition.getIndex(),
 						columnDefinition.getIndex());
 				XSSFDataValidation validation = (XSSFDataValidation) dvHelper.createValidation(dvConstraint,
@@ -88,6 +99,31 @@ public class TemplateGenerator {
 		row.setRowStyle(style);
 
 		return workbook;
+	}
+
+	private XSSFSheet createDropdownValidationSheet(Workbook workbook) {
+		XSSFSheet cvValidationSheet=(XSSFSheet)workbook.createSheet("cv validations");
+		int index=workbook.getSheetIndex(cvValidationSheet);
+		workbook.setSheetVisibility(index, SheetVisibility.VERY_HIDDEN);
+		return cvValidationSheet;
+	}
+
+	private String createNamedRange(Workbook workbook, XSSFSheet cvValidationSheet, DefinitionColumn columnDefinition) {
+		Row validationRow = cvValidationSheet.createRow(columnDefinition.getIndex());
+		for (int i = 0; i < columnDefinition.getValues().length; i++) {
+			Cell validationCell = validationRow.createCell(i);
+			validationCell.setCellValue(columnDefinition.getValues()[i]);
+		}
+		String rangeName = "cvnamedrange" + columnDefinition.getIndex();
+		Name name = workbook.createName();
+		name.setNameName(rangeName);
+		String formula = "'" + cvValidationSheet.getSheetName() + "'!";
+		CellReference ref = new CellReference(columnDefinition.getIndex(), 0, true, true);
+		formula += ref.formatAsString();
+		ref = new CellReference(columnDefinition.getIndex(), columnDefinition.getValues().length - 1, true, true);
+		formula += ":" + ref.formatAsString();
+		name.setRefersToFormula(formula);
+		return rangeName;
 	}
 
 	private void setCellStyle(Cell cell) {

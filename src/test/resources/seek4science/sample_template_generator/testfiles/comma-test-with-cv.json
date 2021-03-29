@@ -1,0 +1,15 @@
+{
+	"sheet_index": 1,
+	"sheet_name": "samples",
+	"columns": [
+		{			
+			"colours": ["red, green","blue","yellow,orange"]			
+		},
+		{
+		"not cv": []
+		},
+		{
+			"another list": ["one, two","three, four"]
+		}
+	]
+}

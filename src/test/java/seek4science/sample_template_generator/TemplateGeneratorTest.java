@@ -12,6 +12,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFName;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.Test;
 
@@ -119,6 +120,26 @@ public class TemplateGeneratorTest {
 		Row row = sheet.getRow(0);
 		assertEquals(0, row.getFirstCellNum());
 		assertEquals("quote's", row.getCell(0).getStringCellValue());
+	}
+
+	@Test
+	public void generateFromJSONWithCommas() throws Exception {
+		String json = FileReader.getContents("comma-test-with-cv.json");
+		Definition def = new DefinitionReader(json).read();		
+		Workbook book = TemplateGenerator.generate(def);
+		assertNotNull(book);
+		Sheet sheet = book.getSheet("samples");
+		assertNotNull(sheet);
+		assertEquals(0, sheet.getFirstRowNum());
+		Row row = sheet.getRow(0);
+		assertEquals(0, row.getFirstCellNum());
+		assertEquals("colours", row.getCell(0).getStringCellValue());	
+		
+		assertEquals(2,book.getAllNames().size());
+		XSSFName name = (XSSFName)book.getAllNames().get(0);
+		assertEquals("cvnamedrange0",name.getNameName());
+		assertEquals("'cv validations'!$A$1:$C$1",name.getRefersToFormula());
+		
 	}
 
 	@Test

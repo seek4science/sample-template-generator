@@ -69,6 +69,24 @@ public class DefinitionReaderTest {
 	}
 
 	@Test
+	public void testReadingJSONWithComma() throws Exception {
+		String json = FileReader.getContents("comma-test-with-cv.json");
+		Definition def = new DefinitionReader(json).read();
+		assertEquals(3, def.getColumns().length);
+		DefinitionColumn column = def.getColumns()[0];
+
+		assertEquals("colours", column.getColumn());
+		assertEquals(0, column.getIndex());
+		String[] values = column.getValues();
+		assertEquals(3, values.length);
+		assertEquals("red, green", values[0]);
+		assertEquals("blue", values[1]);
+		assertEquals("yellow,orange", values[2]);
+
+		assertNull(def.getBaseTemplatePath());
+	}
+
+	@Test
 	public void testReadingJSONWithBaseTemplatePath() throws Exception {
 		String json = FileReader.getContents("includes-template-path.json");
 		Definition def = new DefinitionReader(json).read();

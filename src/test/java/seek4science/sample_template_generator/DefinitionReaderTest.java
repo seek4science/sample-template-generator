@@ -1,5 +1,6 @@
 package seek4science.sample_template_generator;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -41,10 +42,8 @@ public class DefinitionReaderTest {
 		assertEquals(0, column.getIndex());
 		String[] values = column.getValues();
 		assertEquals(4, values.length);
-		assertEquals("a", values[0]);
-		assertEquals("b", values[1]);
-		assertEquals("c", values[2]);
-		assertEquals("d", values[3]);
+		assertArrayEquals(new String[] {"b","d","c","a"}, values);
+		assertArrayEquals(new String[] {"a","b","c","d"}, column.getValuesSorted());		
 
 		assertNull(def.getBaseTemplatePath());
 	}

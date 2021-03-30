@@ -1,5 +1,7 @@
 package seek4science.sample_template_generator;
 
+import java.util.Arrays;
+
 public class DefinitionColumn {
 
 	private String title;
@@ -22,6 +24,12 @@ public class DefinitionColumn {
 
 	public String[] getValues() {
 		return values;
+	}
+	
+	public String[] getValuesSorted() {
+		String [] copy = values.clone();
+		Arrays.sort(copy);
+		return copy;
 	}
 
 }

@@ -125,7 +125,8 @@ public class TemplateGeneratorTest {
 	@Test
 	public void generateFromJSONWithCommas() throws Exception {
 		String json = FileReader.getContents("comma-test-with-cv.json");
-		Definition def = new DefinitionReader(json).read();		
+		Definition def = new DefinitionReader(json).read();	
+		
 		Workbook book = TemplateGenerator.generate(def);
 		assertNotNull(book);
 		Sheet sheet = book.getSheet("samples");

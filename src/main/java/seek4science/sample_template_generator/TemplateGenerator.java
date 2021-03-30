@@ -110,9 +110,10 @@ public class TemplateGenerator {
 
 	private String createNamedRange(Workbook workbook, XSSFSheet cvValidationSheet, DefinitionColumn columnDefinition) {
 		Row validationRow = cvValidationSheet.createRow(columnDefinition.getIndex());
-		for (int i = 0; i < columnDefinition.getValues().length; i++) {
+		String [] values = columnDefinition.getValuesSorted();
+		for (int i = 0; i < values.length; i++) {
 			Cell validationCell = validationRow.createCell(i);
-			validationCell.setCellValue(columnDefinition.getValues()[i]);
+			validationCell.setCellValue(values[i]);
 		}
 		String rangeName = "cvnamedrange" + columnDefinition.getIndex();
 		Name name = workbook.createName();

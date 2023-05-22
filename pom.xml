@@ -67,6 +67,18 @@
 					</archive>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>
+					org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<configuration>
+					<outputDirectory>
+						${project.build.directory}/lib
+					</outputDirectory>
+					<includeScope>
+						compile</includeScope>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 	<description>This is a bespoke java library for use in SEEK (http://seek4science.org). It uses Apache POI to create specially crafted Excel spreadsheets for describing biological sample details</description>
